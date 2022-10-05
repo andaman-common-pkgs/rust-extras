@@ -1,0 +1,37 @@
+# for each folder in rust/
+# generate a new workflow for each folder in rust/
+name: Generate Build Matrix
+on: push
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+
+    outputs:
+      build_matrix: ${{ steps.generate_build_matrix.outputs.build_matrix }}
+      is_empty: ${{ steps.generate_build_matrix.outputs.is_empty }}
+
+    # check out the repo
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Generate Build matrix
+        id: generate_build_matrix
+        uses: keiththompson/detected-changes-action@1.0.2
+
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          paths: rust
+          depth: 1
+
+  build:
+    needs: manifest
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix: ${{ fromJson(needs.manifest.outputs.build_matrix) }}
+
+    steps:
+      - name: Test
+        run: echo ${{ matrix.path }}
