@@ -1,0 +1,24 @@
+name: youki
+
+on:
+  push:
+    paths:
+      - rust/youki/**
+    branches: [main]
+  workflow_dispatch:
+
+  # generate workflow for each folder in rust/
+  # https://github.community/t/how-to-iterate-over-matrix-in-github-actions/16853/2
+
+jobs:
+  anda:
+    uses: andaman-common-pkgs/github-actions/.github/workflows/anda-rpm.yml@main
+    with:
+      name: "rust/youki/pkg"
+      subatomicServer: "https://subatomic.fyralabs.com"
+      subatomicRepo: ad37
+      mockConfig: anda-37-x86_64
+      mockConfigPackage: anda-mock-configs
+      upload: true
+    secrets:
+      subatomicToken: ${{ secrets.SUBATOMIC_TOKEN }}
