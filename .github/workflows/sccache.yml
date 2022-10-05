@@ -1,0 +1,21 @@
+name: sccache
+
+on:
+  push:
+    paths:
+      - rust/sccache/**
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  anda:
+    uses: andaman-common-pkgs/github-actions/.github/workflows/anda-rpm.yml@main
+    with:
+      name: "rust/sccache/pkg"
+      subatomicServer: "https://subatomic.fyralabs.com"
+      subatomicRepo: ad37
+      mockConfig: anda-37-x86_64
+      mockConfigPackage: anda-mock-configs
+      upload: true
+    secrets:
+      subatomicToken: ${{ secrets.SUBATOMIC_TOKEN }}
