@@ -18,12 +18,19 @@ jobs:
 
       - name: Generate Build matrix
         id: generate_build_matrix
-        uses: keiththompson/detected-changes-action@1.0.2
-
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          target-directory: rust
-          depth: 1
+        # generate build matrix by checking out changes in rust/
+        run: |
+          # get the list of changed folders
+          changed_folders=$(git diff --name-only HEAD^ | grep -oP 'rust/\K[^/]*' | sort -u)
+          # if there are no changes, exit
+          if [ -z "$changed_folders" ]; then
+            echo "::set-output name=is_empty::true"
+            exit 0
+          fi
+          # generate the build matrix
+          build_matrix=$(echo "$changed_folders" | sed 's/^/- rust\/&\/pkg/')
+          echo "::set-output name=build_matrix::$build_matrix"
+          echo "::set-output name=is_empty::false"
 
   build:
     needs: manifest
