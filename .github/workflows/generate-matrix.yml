@@ -22,7 +22,7 @@ jobs:
 
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          paths: rust
+          target-directory: rust
           depth: 1
 
   build:
