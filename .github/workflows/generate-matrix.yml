@@ -24,16 +24,9 @@ jobs:
         run: |
           # get the list of changed folders in the current commit
           changed_folders=$(git diff --name-only HEAD | grep -oP 'rust/\K[^/]*' | sort -u)
-          # if there are no changes, exit
-          if [ -z "$changed_folders" ]; then
-            echo "::set-output name=is_empty::true"
-            exit 0
-          fi
-          # generate the build matrix
-          build_matrix=$(echo "$changed_folders" | sed 's/^/- rust\/\0\/pkg/g')
+          #build_matrix=$(echo $changed_folders | jq -R -s -c 'split("\n")[:-1]')
+          build_matrix=$(ls rust/ | jq -R -s -c 'split("\n")[:-1]')
           echo "::set-output name=build_matrix::$build_matrix"
-          echo "::set-output name=is_empty::false"
-
   build:
     needs: manifest
     runs-on: ubuntu-latest
