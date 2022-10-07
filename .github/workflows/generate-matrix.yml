@@ -23,9 +23,9 @@ jobs:
         run: |
           # get the list of changed folders in the current commit
           changed_folders=$(git diff --name-only HEAD^ | grep -oP 'rust/\K[^/]*' | sort -u)
-          #build_matrix=$(echo $changed_folders | jq -R -s -c 'split("\n")[:-1]')
+          build_matrix=$(echo $changed_folders | jq -R -s -c 'split("\n")[:-1]')
 
-          build_matrix=$(ls rust/ | jq -R -s -c 'split("\n")[:-1]')
+          #build_matrix=$(ls rust/ | jq -R -s -c 'split("\n")[:-1]')
           # create build matrix with { changed_folders: [ "folder1", "folder2" ] }
           echo "::set-output name=build_matrix::{\"changed_folders\": $build_matrix}"
           #echo "::set-output name=build_matrix::$build_matrix"
