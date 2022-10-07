@@ -9,7 +9,6 @@ jobs:
 
     outputs:
       build_matrix: ${{ steps.generate_build_matrix.outputs.build_matrix }}
-      is_empty: ${{ steps.generate_build_matrix.outputs.is_empty }}
 
     # check out the repo
     steps:
@@ -36,4 +35,4 @@ jobs:
 
     steps:
       - name: Test
-        run: echo ${{ matrix.path }}
+        run: echo ${{ matrix }}
