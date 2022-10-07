@@ -2,7 +2,10 @@
 # generate a new workflow for each folder in rust/
 name: Build from generated changes
 on:
+
   push:
+    paths:
+      - rust/**
     branches:
       - main
   workflow_dispatch:
