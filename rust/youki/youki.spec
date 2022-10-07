@@ -1,6 +1,6 @@
 Name:           youki
 Version:        0.0.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A container runtime written in Rust
 
 License:        Apache-2.0
