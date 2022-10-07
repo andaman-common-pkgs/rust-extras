@@ -1,6 +1,6 @@
 # for each folder in rust/
 # generate a new workflow for each folder in rust/
-name: Generate Build Matrix
+name: Build from generated changes
 on: push
 
 jobs:
