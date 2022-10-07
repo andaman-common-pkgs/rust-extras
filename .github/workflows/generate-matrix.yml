@@ -9,6 +9,7 @@ jobs:
 
     outputs:
       build_matrix: ${{ steps.generate_build_matrix.outputs.build_matrix }}
+      is_empty: ${{ steps.generate_build_matrix.outputs.is_empty }}
 
     # check out the repo
     steps:
@@ -25,10 +26,17 @@ jobs:
         run: |
           # get the list of changed folders in the current commit
           changed_folders=$(git diff --name-only HEAD^ | grep -oP 'rust/\K[^/]*' | sort -u)
+          # if changed_folders is empty then set is empty to true
+          if [ -z "$changed_folders" ]; then
+            echo "::set-output name=is_empty::true"
+          else
+            echo "::set-output name=is_empty::false"
+          fi
           build_matrix=$(echo $changed_folders | jq -R -s -c 'split("\n")[:-1]')
 
           #build_matrix=$(ls rust/ | jq -R -s -c 'split("\n")[:-1]')
           # create build matrix with { changed_folders: [ "folder1", "folder2" ] }
+
           echo "::set-output name=build_matrix::{\"changed_folders\": $build_matrix}"
           #echo "::set-output name=build_matrix::$build_matrix"
   build:
@@ -40,4 +48,6 @@ jobs:
 
     steps:
       - name: Test
+        # if changed_folders is not empty
+        if: ${{ needs.manifest.outputs.is_empty != false }}
         run: echo ${{ matrix.changed_folders }}
