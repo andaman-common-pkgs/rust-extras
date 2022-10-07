@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 2
       - run: git fetch
-      - run: git checkout HEAD^
+      #- run: git checkout HEAD^
 
       - name: Generate Build matrix
         id: generate_build_matrix
